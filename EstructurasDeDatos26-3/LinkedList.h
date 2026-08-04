@@ -11,6 +11,7 @@ public:
 	int GetSize();
 	void Print();
 	void InsertionSort();
+	void SelectionSort();
 	~LinkedList();
 };
 
