@@ -58,6 +58,31 @@ void LinkedList::Print()
 	}
 }
 
+void LinkedList::SelectionSort()
+{
+	Node* actual = _first;
+	while (actual != nullptr)
+	{
+		Node* menor = actual;
+		Node* recorrido = actual->next;
+
+		while (recorrido != nullptr)
+		{
+			if (recorrido->data < menor->data)
+			{
+				menor = recorrido;
+			}
+			recorrido = recorrido->next;
+		}
+
+		int temp = actual->data;
+		actual->data = menor->data;
+		menor->data = temp;
+
+		actual = actual->next;
+	}
+}
+
 LinkedList::~LinkedList()
 {
 	Node* actual = _first;
