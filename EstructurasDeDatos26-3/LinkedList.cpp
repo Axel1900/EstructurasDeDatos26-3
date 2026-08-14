@@ -82,6 +82,37 @@ void LinkedList::SelectionSort()
 		actual = actual->next;
 	}
 }
+void LinkedList::InsertionSort()
+{
+	if (_first == nullptr || _first->next == nullptr)
+		return;
+
+	Node* sorted = nullptr;
+	Node* actual = _first;
+
+	while (actual != nullptr)
+	{
+		Node* siguiente = actual->next;
+
+		if (sorted == nullptr || sorted->data >= actual->data)
+		{
+			actual->next = sorted;
+			sorted = actual;
+		}
+		else
+		{
+			Node* temp = sorted;
+			while (temp->next != nullptr && temp->next->data < actual->data)
+			{
+				temp = temp->next;
+			}
+			actual->next = temp->next;
+			temp->next = actual;
+		}
+		actual = siguiente;
+	}
+	_first = sorted;
+}
 
 LinkedList::~LinkedList()
 {
