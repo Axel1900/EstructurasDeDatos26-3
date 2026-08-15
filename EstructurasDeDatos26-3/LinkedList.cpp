@@ -1,4 +1,5 @@
 #include "LinkedList.h"
+#include "ConsoleUI.h"
 #include <iostream>
 
 LinkedList::LinkedList()
@@ -33,6 +34,7 @@ int LinkedList::GetAt(int index)
 {
 	if (index < 0 || index >= _size)
 	{
+		ConsoleUI::PrintError("index fuera de rango");
 		return -1;
 	}
 
@@ -51,37 +53,30 @@ int LinkedList::GetSize()
 
 void LinkedList::Print()
 {
+	if (_first == nullptr)
+	{
+		ConsoleUI::PrintError("la lista esta vacia");
+		return;
+	}
+
+	ConsoleUI::PrintTitle("contenido de la Lista");
+
+	int* arreglo = new int[_size];
+
 	Node* actual = _first;
+	int i = 0;
 	while (actual != nullptr)
 	{
+		arreglo[i] = actual->data;
 		actual = actual->next;
+		i++;
 	}
+
+	ConsoleUI::PrintList(arreglo, _size);
+
+	delete[] arreglo;
 }
 
-void LinkedList::SelectionSort()
-{
-	Node* actual = _first;
-	while (actual != nullptr)
-	{
-		Node* menor = actual;
-		Node* recorrido = actual->next;
-
-		while (recorrido != nullptr)
-		{
-			if (recorrido->data < menor->data)
-			{
-				menor = recorrido;
-			}
-			recorrido = recorrido->next;
-		}
-
-		int temp = actual->data;
-		actual->data = menor->data;
-		menor->data = temp;
-
-		actual = actual->next;
-	}
-}
 void LinkedList::InsertionSort()
 {
 	if (_first == nullptr || _first->next == nullptr)
@@ -112,6 +107,31 @@ void LinkedList::InsertionSort()
 		actual = siguiente;
 	}
 	_first = sorted;
+}
+
+void LinkedList::SelectionSort()
+{
+	Node* actual = _first;
+	while (actual != nullptr)
+	{
+		Node* menor = actual;
+		Node* recorrido = actual->next;
+
+		while (recorrido != nullptr)
+		{
+			if (recorrido->data < menor->data)
+			{
+				menor = recorrido;
+			}
+			recorrido = recorrido->next;
+		}
+
+		int temp = actual->data;
+		actual->data = menor->data;
+		menor->data = temp;
+
+		actual = actual->next;
+	}
 }
 
 LinkedList::~LinkedList()
