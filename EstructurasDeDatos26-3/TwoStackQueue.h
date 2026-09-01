@@ -1,6 +1,7 @@
 #pragma once
+#include <iostream>
 #include "Stack.h"
-
+#include "ConsoleUI.h"
 // =====================================================================
 //  TwoStackQueue<T>  -  Cola (FIFO) construida con DOS pilas (LIFO)
 //
@@ -61,51 +62,100 @@ TwoStackQueue<T>::~TwoStackQueue()
 template <class T>
 void TwoStackQueue<T>::Volcar()
 {
-    // TODO: SOLO si _salida esta vacia, pasar todo de _entrada a _salida
+    if (_salida.IsEmpty())
+    {
+        while (!_entrada.IsEmpty())
+        {
+            _salida.Push(_entrada.Pop());
+        }
+    }
 }
 
 template <class T>
 void TwoStackQueue<T>::Enqueue(T value)
 {
-    // TODO
+    _entrada.Push(value);
 }
 
 template <class T>
 T TwoStackQueue<T>::Dequeue()
 {
-    // TODO
-    return T();
+    Volcar();
+
+    if (_salida.IsEmpty())
+    {
+        ConsoleUI::PrintError("TwoStackQueue::Dequeue - la cola esta vacia");
+        return T();
+    }
+
+    return _salida.Pop();
 }
 
 template <class T>
 T TwoStackQueue<T>::Front()
 {
-    // TODO
-    return T();
+    Volcar();
+
+    if (_salida.IsEmpty())
+    {
+        ConsoleUI::PrintError("TwoStackQueue::Front - la cola esta vacia");
+        return T();
+    }
+
+    return _salida.Top();
 }
 
 template <class T>
 bool TwoStackQueue<T>::IsEmpty()
 {
-    // TODO: la cola esta vacia solo si AMBAS pilas estan vacias
-    return true;
+    return _entrada.IsEmpty() && _salida.IsEmpty();
 }
 
 template <class T>
 int TwoStackQueue<T>::GetSize()
 {
-    // TODO
-    return 0;
+    return _entrada.GetSize() + _salida.GetSize();
 }
 
 template <class T>
 void TwoStackQueue<T>::Clear()
 {
-    // TODO
+    _entrada.Clear();
+    _salida.Clear();
 }
 
 template <class T>
 void TwoStackQueue<T>::Print()
 {
-    // TODO
+    if (IsEmpty())
+    {
+        ConsoleUI::PrintColor("(cola vacia)", ConsoleUI::COLOR_AMARILLO);
+        return;
+    }
+
+    Stack<T> copiaSalida = _salida;
+    Stack<T> copiaEntrada = _entrada;
+
+    bool primero = true;
+
+    while (!copiaSalida.IsEmpty())
+    {
+        if (!primero) std::cout << " -> ";
+        std::cout << copiaSalida.Pop();
+        primero = false;
+    }
+
+    Stack<T> invertida;
+    while (!copiaEntrada.IsEmpty())
+    {
+        invertida.Push(copiaEntrada.Pop());
+    }
+    while (!invertida.IsEmpty())
+    {
+        if (!primero) std::cout << " -> ";
+        std::cout << invertida.Pop();
+        primero = false;
+    }
+
+    std::cout << std::endl;
 }
