@@ -3,6 +3,7 @@
 #include "Stack.h"
 #include "LinkedQueue.h"
 #include "ConsoleUI.h"
+#include <sstream>
 
 // =====================================================================
 //  Tree<T>  -  Arbol binario de busqueda (BST)
@@ -82,72 +83,88 @@ Tree<T>::Tree()
 template <class T>
 Tree<T>::~Tree()
 {
-    // TODO: llamar a DestruirRec desde la raiz
+    DestruirRec(_root);
 }
 
 template <class T>
 void Tree<T>::DestruirRec(Node* n)
 {
-    // TODO: destruir primero los hijos y HASTA EL FINAL el nodo actual.
-    // Si borras el nodo antes que sus hijos, pierdes la forma de llegar
-    // a ellos. Fijate que ese orden es exactamente el POST-ORDEN.
+    if (n == nullptr)
+        return;
+
+    DestruirRec(n->left);
+    DestruirRec(n->right);
+    delete n;
 }
 
 template <class T>
 void Tree<T>::Insert(T valor)
 {
-    // TODO: arrancar la recursion desde la raiz
+    InsertRec(_root, valor);
 }
 
 template <class T>
 void Tree<T>::InsertRec(Node*& n, T valor)
 {
-    // TODO: si n es nullptr, aqui va el nodo nuevo (y sube _size).
-    //       Si el valor es menor, baja a la izquierda.
-    //       Si es mayor, baja a la derecha.
-    //       Si es igual, no hagas nada: no se permiten duplicados.
-    //
-    // OJO con la firma: 'Node*& n' es una REFERENCIA a puntero. Eso es
-    // lo que te permite asignarle el nodo nuevo y que el cambio se vea
-    // en el padre. Con 'Node* n' a secas, modificarias una copia del
-    // puntero y el arbol se quedaria vacio.
+    if (n == nullptr)
+    {
+        n = new Node();
+        n->data = valor;
+        n->left = nullptr;
+        n->right = nullptr;
+        _size++;
+        return;
+    }
+
+    if (valor < n->data)
+        InsertRec(n->left, valor);
+    else if (valor > n->data)
+        InsertRec(n->right, valor);
 }
 
 template <class T>
 bool Tree<T>::Contains(T valor)
 {
-    // TODO
-    return false;
+    return ContainsRec(_root, valor);
 }
 
 template <class T>
 bool Tree<T>::ContainsRec(Node* n, T valor)
 {
-    // TODO: caso base cuando n es nullptr (no esta).
-    //       Si no, compara y baja por el lado que corresponde.
-    return false;
+    if (n == nullptr)
+        return false;
+
+    if (valor == n->data)
+        return true;
+
+    if (valor < n->data)
+        return ContainsRec(n->left, valor);
+
+    return ContainsRec(n->right, valor);
 }
 
 template <class T>
 int Tree<T>::GetSize()
 {
-    // TODO
-    return 0;
+    return _size;
 }
 
 template <class T>
 int Tree<T>::GetAltura()
 {
-    // TODO
-    return 0;
+    return AlturaRec(_root);
 }
 
 template <class T>
 int Tree<T>::AlturaRec(Node* n)
 {
-    // TODO: un arbol vacio mide 0. Si no, mide 1 mas que el MAS ALTO
-    //       de sus dos subarboles.
-    return 0;
+    if (n == nullptr)
+        return 0;
+
+    int izquierda = AlturaRec(n->left);
+    int derecha = AlturaRec(n->right);
+
+    return 1 + (izquierda > derecha ? izquierda : derecha);
 }
 
 template <class T>
@@ -238,6 +255,14 @@ void Tree<T>::NivelRec(Node* n, int nivel, LinkedList<T>& resultado)
 template <class T>
 void Tree<T>::Print()
 {
-    // TODO: usa el recorrido in-orden y ConsoleUI para mostrar el arbol.
-    // Casi todo el trabajo ya lo hiciste: aqui solo lo conectas.
+    LinkedList<T> resultado;
+    InRec(_root, resultado);
+
+    for (int i = 0; i < resultado.GetSize(); i++)
+    {
+        std::ostringstream ss;
+        ss << resultado.GetAt(i);
+        ConsoleUI::PrintColor(ss.str(), ConsoleUI::COLOR_VERDE);
+    }
+    ConsoleUI::PrintSeparator();
 }
