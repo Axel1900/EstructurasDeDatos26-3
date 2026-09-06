@@ -69,119 +69,190 @@ LinkedList<T>::LinkedList()
 template <class T>
 LinkedList<T>::~LinkedList()
 {
-    // TODO: liberar todos los nodos
+    Node* actual = _first;
+    while (actual != nullptr)
+    {
+        Node* siguiente = actual->next; 
+        delete actual;                
+        actual = siguiente;             
+    }
 }
 
 template <class T>
 void LinkedList<T>::Add(Node* n)
 {
-    // TODO: enganchar 'n' al final de la lista
+    if (_first == nullptr)
+    {
+        _first = n;  
+    }
+    else
+    {
+        Node* actual = _first;
+        while (actual->next != nullptr)
+        {
+            actual = actual->next;  
+        }
+        actual->next = n;
+    }
+    _size++; 
 }
 
 template <class T>
 void LinkedList<T>::Add(T dato)
 {
-    // TODO: crear el nodo aqui adentro y mandarlo al Add privado
+    Node* nuevo = new Node();
+    nuevo->data = dato;
+    nuevo->next = nullptr;
+    nuevo->id = _size;
+
+    Add(nuevo);
 }
 
 template <class T>
 T LinkedList<T>::GetAt(int index)
 {
-    // TODO: validar el rango y recorrer hasta la posicion
-    return T();
+    Node* actual = _first;
+    for (int i = 0; i < index; i++)   
+    {
+        actual = actual->next; 
+    }
+    return actual->data;  
 }
 
 template <class T>
 T& LinkedList<T>::operator[](int index)
 {
-    // TODO: igual que GetAt, pero regresando una REFERENCIA al dato
-    // para que se pueda escribir: lista[0] = 99;
-    //
-    // PIENSALO: al regresar una referencia ya no puedes regresar -1
-    // como codigo de error. Que haces si el indice no existe?
-    return _basura;
+    Node* actual = _first;
+    for (int i = 0; i < index; i++)
+    {
+        actual = actual->next;
+    }
+    return actual->data;
 }
 
 template <class T>
 int LinkedList<T>::GetSize()
 {
-    // TODO
-    return 0;
+    return _size;
 }
 
 template <class T>
 void LinkedList<T>::Print()
 {
-    // TODO
+    Node* actual = _first;
+    while (actual != nullptr)
+    {
+        std::cout << actual->data << " ";
+        actual = actual->next;
+    }
+    std::cout << std::endl;
 }
 
 template <class T>
 void LinkedList<T>::PrintReverse()
 {
-    // TODO: arrancar la recursion desde _first
+    PrintReverseRec(_first);
 }
 
 template <class T>
 void LinkedList<T>::PrintReverseRec(Node* actual)
 {
-    // TODO: primero recurre hasta el final, y APENAS AL REGRESAR imprime.
-    // Ese cambio de orden es todo el truco.
-    //
-    // Funciona porque la pila de llamadas esta guardando los nodos por
-    // ti. O sea: ya estabas usando un Stack sin darte cuenta.
+    if (actual == nullptr)
+        return;
+
+    PrintReverseRec(actual->next);
+
+    std::cout << actual->data << " ";
 }
 
 template <class T>
 T LinkedList<T>::GetAtRecursivo(int index)
 {
-    // TODO
-    return T();
+    return GetAtRec(_first, index);
 }
 
 template <class T>
 T LinkedList<T>::GetAtRec(Node* actual, int index)
 {
-    // TODO
-    return T();
+    if (index == 0)
+        return actual->data;
+
+    return GetAtRec(actual->next, index - 1);
 }
 
 template <class T>
 int LinkedList<T>::CountRecursivo()
 {
-    // TODO
-    return 0;
+    return CountRec(_first);
 }
 
 template <class T>
 int LinkedList<T>::CountRec(Node* actual)
 {
-    // TODO: caso base cuando actual es nullptr
-    return 0;
+    if (actual == nullptr)
+        return 0;
+
+    return 1 + CountRec(actual->next);
 }
 
 template <class T>
 int LinkedList<T>::BuscarRecursivo(T valor)
 {
-    // TODO: regresa el indice donde esta el valor, o -1 si no existe
-    return -1;
+    return BuscarRec(_first, valor, 0);
 }
 
 template <class T>
 int LinkedList<T>::BuscarRec(Node* actual, T valor, int indiceActual)
 {
-    // TODO
-    return -1;
+    if (actual == nullptr)
+        return -1;  
+
+    if (actual->data == valor)
+        return indiceActual; 
+
+    return BuscarRec(actual->next, valor, indiceActual + 1);
 }
 
 template <class T>
 void LinkedList<T>::SelectionSort()
 {
-    // TODO: ordenar INTERCAMBIANDO los datos entre nodos,
-    //       no reconectando los punteros
+    for (Node* i = _first; i != nullptr && i->next != nullptr; i = i->next)
+    {
+        Node* minimo = i;
+        for (Node* j = i->next; j != nullptr; j = j->next)
+        {
+            if (j->data < minimo->data)
+                minimo = j;
+        }
+        T temp = i->data;
+        i->data = minimo->data;
+        minimo->data = temp;
+    }
 }
 
 template <class T>
 void LinkedList<T>::InsertionSort()
 {
-    // TODO: ordenar INTERCAMBIANDO los datos entre nodos
+    for (Node* actual = _first; actual != nullptr; actual = actual->next)
+    {
+        Node* j = actual;
+        while (j != _first)
+        {
+            Node* prev = _first;
+            while (prev->next != j)
+                prev = prev->next;
+
+            if (prev->data > j->data)
+            {
+                T temp = prev->data;
+                prev->data = j->data;
+                j->data = temp;
+                j = prev; 
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
 }

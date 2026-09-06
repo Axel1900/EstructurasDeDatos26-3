@@ -51,61 +51,75 @@ public:
 template <class T>
 TwoStackQueue<T>::TwoStackQueue()
 {
+
 }
 
 template <class T>
 TwoStackQueue<T>::~TwoStackQueue()
 {
+
 }
 
 template <class T>
 void TwoStackQueue<T>::Volcar()
 {
-    // TODO: SOLO si _salida esta vacia, pasar todo de _entrada a _salida
+    if (_salida.IsEmpty())
+    {
+        while (!_entrada.IsEmpty())
+        {
+            _salida.Push(_entrada.Pop());
+        }
+    }
 }
 
 template <class T>
 void TwoStackQueue<T>::Enqueue(T value)
 {
-    // TODO
+    _entrada.Push(value);
 }
 
 template <class T>
 T TwoStackQueue<T>::Dequeue()
 {
-    // TODO
-    return T();
+    Volcar();
+
+    if (_salida.IsEmpty())
+        return T();
+    return _salida.Pop();
 }
 
 template <class T>
 T TwoStackQueue<T>::Front()
 {
-    // TODO
-    return T();
+    Volcar();
+
+    if (_salida.IsEmpty())
+        return T();
+    return _salida.Top();
 }
 
 template <class T>
 bool TwoStackQueue<T>::IsEmpty()
 {
-    // TODO: la cola esta vacia solo si AMBAS pilas estan vacias
-    return true;
+    return _entrada.IsEmpty() && _salida.IsEmpty();
 }
 
 template <class T>
 int TwoStackQueue<T>::GetSize()
 {
-    // TODO
-    return 0;
+    return _entrada.GetSize() + _salida.GetSize();
 }
 
 template <class T>
 void TwoStackQueue<T>::Clear()
 {
-    // TODO
+    _entrada.Clear();
+    _salida.Clear();
 }
 
 template <class T>
 void TwoStackQueue<T>::Print()
 {
-    // TODO
+    Volcar();
+    _salida.Print();
 }

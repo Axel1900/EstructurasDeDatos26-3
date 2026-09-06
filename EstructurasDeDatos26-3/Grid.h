@@ -54,29 +54,46 @@ Grid<T>::Grid(int filas, int columnas)
     _filas = filas;
     _columnas = columnas;
 
-    // TODO: reservar la memoria de _celdas y _visitadas.
-    // Acuerdate: primero un arreglo de punteros, y luego dentro de un
-    // ciclo, un arreglo por cada renglon.
+    _celdas = new T*[_filas];
+    _visitadas = new bool*[_filas];
+    for (int f = 0; f < _filas; f++)
+    {
+        _celdas[f] = new T[_columnas];
+        _visitadas[f] = new bool[_columnas];
+
+        for (int c = 0; c < _columnas; c++)
+            _visitadas[f][c] = false;
+    }
 }
 
 template <class T>
 Grid<T>::~Grid()
 {
-    // TODO: liberar en el orden INVERSO al que reservaste:
-    //       primero cada renglon, y al final el arreglo de punteros.
+    for (int f = 0; f < _filas; f++)
+    {
+        delete[] _celdas[f];
+        delete[] _visitadas[f];
+    }
+    delete[] _celdas;
+    delete[] _visitadas;
 }
 
 template <class T>
 void Grid<T>::Set(int fila, int columna, T valor)
 {
-    // TODO: validar que la coordenada exista antes de escribir
+    if (fila < 0 || fila >= _filas || columna < 0 || columna >= _columnas)
+        return;
+
+    _celdas[fila][columna] = valor;
 }
 
 template <class T>
 T Grid<T>::Get(int fila, int columna)
 {
-    // TODO: validar que la coordenada exista antes de leer
-    return T();
+    if (fila < 0 || fila >= _filas || columna < 0 || columna >= _columnas)
+        return T();
+
+    return _celdas[fila][columna];
 }
 
 template <class T>
@@ -94,24 +111,46 @@ int Grid<T>::GetColumnas()
 template <class T>
 int Grid<T>::FloodFill(int fila, int columna)
 {
-    // TODO: 1) validar la coordenada
-    //       2) REINICIAR todas las celdas visitadas a false
-    //          (si no lo haces, la segunda vez que corras FloodFill
-    //           te va a regresar 0)
-    //       3) llamar a FloodRecursivo con el valor de esa celda
-    return 0;
+    if (fila < 0 || fila >= _filas || columna < 0 || columna >= _columnas)
+        return 0;
+
+    for (int f = 0; f < _filas; f++)
+        for (int c = 0; c < _columnas; c++)
+            _visitadas[f][c] = false;
+
+    return FloodRecursivo(fila, columna, _celdas[fila][columna]);
 }
 
 template <class T>
 int Grid<T>::FloodRecursivo(int fila, int columna, T objetivo)
 {
-    // TODO: tres casos base, luego marcar como visitada,
-    //       y sumar 1 + las cuatro llamadas recursivas
-    return 0;
+    if (fila < 0 || fila >= _filas || columna < 0 || columna >= _columnas)
+        return 0;
+
+    if (_celdas[fila][columna] != objetivo)
+        return 0;
+
+    if (_visitadas[fila][columna])
+        return 0;
+
+    _visitadas[fila][columna] = true;
+
+    return 1
+        + FloodRecursivo(fila - 1, columna, objetivo)
+        + FloodRecursivo(fila + 1, columna, objetivo)
+        + FloodRecursivo(fila, columna - 1, objetivo)
+        + FloodRecursivo(fila, columna + 1, objetivo);
 }
 
 template <class T>
 void Grid<T>::Print()
 {
-    // TODO: imprimir la rejilla en formato tabular
+    for (int f = 0; f < _filas; f++)
+    {
+        for (int c = 0; c < _columnas; c++)
+        {
+            std::cout << _celdas[f][c] << "\t";
+        }
+        std::cout << std::endl;
+    }
 }

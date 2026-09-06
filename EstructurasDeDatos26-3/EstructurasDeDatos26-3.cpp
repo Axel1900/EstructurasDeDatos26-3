@@ -93,6 +93,9 @@ void MenuPruebas()
     std::cout << "5.- Recursividad" << std::endl;
     std::cout << "6.- Grid" << std::endl;
     std::cout << "7.- Memoria" << std::endl;
+    std::cout << "8.- HashTable" << std::endl;
+    std::cout << "9.- Tree" << std::endl;
+    std::cout << "10.- Recorridos" << std::endl;
     std::cout << "Elige un grupo: ";
     std::cin >> grupo;
 
@@ -113,6 +116,9 @@ void MenuPruebas()
     case 5: CorrerPruebasDe("Recursividad"); break;
     case 6: CorrerPruebasDe("Grid");         break;
     case 7: CorrerPruebasDe("Memoria");      break;
+    case 8:  CorrerPruebasDe("HashTable");  break;
+    case 9:  CorrerPruebasDe("Tree");       break;
+    case 10: CorrerPruebasDe("Recorridos"); break;
     default: ConsoleUI::PrintError("Grupo invalido."); break;
     }
 }

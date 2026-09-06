@@ -1,5 +1,6 @@
 #pragma once
 #include "TNode.h"
+#include <iostream>
 
 // =====================================================================
 //  LinkedQueue<T>  -  Cola generica (FIFO) sobre nodos enlazados
@@ -45,52 +46,83 @@ LinkedQueue<T>::LinkedQueue()
 template <class T>
 LinkedQueue<T>::~LinkedQueue()
 {
-    // TODO: liberar todos los nodos
+    Clear();
 }
 
 template <class T>
 void LinkedQueue<T>::Enqueue(T value)
 {
-    // TODO: agregar al final. Ojo con el caso de la cola vacia.
+    TNode<T>* nuevo = new TNode<T>(value, _size);
+
+    if (_first == nullptr)
+    {
+        _first = nuevo;
+        _last = nuevo;
+    }
+    else
+    {
+        _last->setNext(nuevo);
+        _last = nuevo;
+    }
+    _size++;
 }
 
 template <class T>
 T LinkedQueue<T>::Dequeue()
 {
-    // TODO: quitar el del frente, regresar su dato y LIBERAR el nodo.
-    //       Si la cola queda vacia, no olvides dejar _last en nullptr.
-    return T();
+    // Quito el del frente.
+    TNode<T>* nodo = _first; 
+    T dato = nodo->getDato(); 
+
+    _first = nodo->getNext(); 
+
+    if (_first == nullptr)
+        _last = nullptr;
+
+    _size--;
+    delete nodo;
+    return dato;
 }
 
 template <class T>
 T LinkedQueue<T>::Front()
 {
-    // TODO: regresar el dato del frente SIN quitarlo
-    return T();
+    return _first->getDato();
 }
 
 template <class T>
 bool LinkedQueue<T>::IsEmpty()
 {
-    // TODO
-    return true;
+    return _first == nullptr;
 }
 
 template <class T>
 int LinkedQueue<T>::GetSize()
 {
-    // TODO
-    return 0;
+    return _size;
 }
 
 template <class T>
 void LinkedQueue<T>::Clear()
 {
-    // TODO
+    while (_first != nullptr)
+    {
+        TNode<T>* nodo = _first;
+        _first = nodo->getNext();
+        delete nodo;
+    }
+    _last = nullptr;
+    _size = 0;
 }
 
 template <class T>
 void LinkedQueue<T>::Print()
 {
-    // TODO: imprimir del frente hacia atras
+    TNode<T>* actual = _first;
+    while (actual != nullptr)
+    {
+        std::cout << actual->getDato() << " ";
+        actual = actual->getNext();
+    }
+    std::cout << std::endl;
 }
