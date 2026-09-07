@@ -241,35 +241,46 @@ void Tree<T>::InOrdenIterativo(LinkedList<T>& resultado)
 template <class T>
 void Tree<T>::PorNiveles(LinkedList<T>& resultado)
 {
-    // TODO: BFS con TU LinkedQueue<Node*>.
-    //
-    // Mete la raiz a la cola. Mientras la cola no este vacia:
-    // saca uno, agregalo al resultado, y encola a sus hijos
-    // (primero el izquierdo, luego el derecho).
-    //
-    // Fijate: es el MISMO algoritmo que el de arriba, pero cambiando
-    // la pila por una cola. Eso solito convierte un DFS en un BFS.
+    LinkedQueue<Node*> cola;
+
+    if (_root != nullptr)
+        cola.Enqueue(_root);
+
+    while (!cola.IsEmpty())
+    {
+        Node* actual = cola.Dequeue();
+        resultado.Add(actual->data);
+
+        if (actual->left != nullptr)
+            cola.Enqueue(actual->left);
+        if (actual->right != nullptr)
+            cola.Enqueue(actual->right);
+    }
 }
 
 template <class T>
 void Tree<T>::PorNivelesRecursivo(LinkedList<T>& resultado)
 {
-    // TODO: el mismo resultado que PorNiveles, pero SIN cola.
-    //
-    // Estrategia: pide la altura del arbol, y luego, para cada nivel
-    // del 1 hasta la altura, baja recursivamente y agrega solo los
-    // nodos de ESE nivel.
-    //
-    // Va a ser mas lento que la version con cola: los nodos de arriba
-    // se vuelven a recorrer una vez por cada nivel que hay debajo.
-    // Compara las dos versiones y piensa por que.
+    int altura = AlturaRec(_root);
+
+    for (int nivel = 1; nivel <= altura; nivel++)
+        NivelRec(_root, nivel, resultado);
 }
 
 template <class T>
 void Tree<T>::NivelRec(Node* n, int nivel, LinkedList<T>& resultado)
 {
-    // TODO: si nivel == 1, este nodo es de los que van al resultado.
-    //       Si no, baja a los dos hijos pidiendo el nivel de abajo.
+    if (n == nullptr)
+        return;
+
+    if (nivel == 1)
+    {
+        resultado.Add(n->data);
+        return;
+    }
+
+    NivelRec(n->left, nivel - 1, resultado);
+    NivelRec(n->right, nivel - 1, resultado);
 }
 
 template <class T>
