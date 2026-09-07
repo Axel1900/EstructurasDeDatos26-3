@@ -170,52 +170,72 @@ int Tree<T>::AlturaRec(Node* n)
 template <class T>
 void Tree<T>::PreOrden(LinkedList<T>& resultado)
 {
-    // TODO: arrancar PreRec desde la raiz
+    PreRec(_root, resultado);
 }
 
 template <class T>
 void Tree<T>::PreRec(Node* n, LinkedList<T>& resultado)
 {
-    // TODO: nodo, izquierda, derecha
+    if (n == nullptr)
+        return;
+
+    resultado.Add(n->data);
+    PreRec(n->left, resultado);
+    PreRec(n->right, resultado);
 }
 
 template <class T>
 void Tree<T>::InOrden(LinkedList<T>& resultado)
 {
-    // TODO
+    InRec(_root, resultado);
 }
 
 template <class T>
 void Tree<T>::InRec(Node* n, LinkedList<T>& resultado)
 {
-    // TODO: izquierda, nodo, derecha
+    if (n == nullptr)
+        return;
+
+    InRec(n->left, resultado);
+    resultado.Add(n->data);
+    InRec(n->right, resultado);
 }
 
 template <class T>
 void Tree<T>::PostOrden(LinkedList<T>& resultado)
 {
-    // TODO
+    PostRec(_root, resultado);
 }
 
 template <class T>
 void Tree<T>::PostRec(Node* n, LinkedList<T>& resultado)
 {
-    // TODO: izquierda, derecha, nodo
+    if (n == nullptr)
+        return;
+
+    PostRec(n->left, resultado);
+    PostRec(n->right, resultado);
+    resultado.Add(n->data);
 }
 
 template <class T>
 void Tree<T>::InOrdenIterativo(LinkedList<T>& resultado)
 {
-    // TODO: el mismo in-orden, pero SIN recursion, usando TU Stack<Node*>.
-    //
-    // La idea: baja lo mas a la izquierda que puedas, apilando cada nodo
-    // por el que pasas. Cuando ya no puedas bajar mas, saca uno de la
-    // pila, agregalo al resultado, y muevete a SU hijo derecho.
-    // Repite mientras queden nodos o la pila no este vacia.
-    //
-    // Aqui esta la leccion: la pila que el compilador manejaba solo en
-    // la version recursiva, ahora la manejas tu a mano. Son la misma
-    // cosa con distinta ropa.
+    Stack<Node*> pila;
+    Node* actual = _root;
+
+    while (actual != nullptr || !pila.IsEmpty())
+    {
+        while (actual != nullptr)
+        {
+            pila.Push(actual);
+            actual = actual->left;
+        }
+
+        actual = pila.Pop();
+        resultado.Add(actual->data);
+        actual = actual->right;
+    }
 }
 
 template <class T>
