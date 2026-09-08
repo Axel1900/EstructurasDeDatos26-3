@@ -128,11 +128,13 @@
     <ClCompile Include="Nodo.cpp" />
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="Tests.cpp" />
+    <ClCompile Include="Tests_AVL.cpp" />
     <ClCompile Include="Tests_Graph.cpp" />
     <ClCompile Include="Tests_HashTree.cpp" />
     <ClCompile Include="TNode.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AVLTree.h" />
     <ClInclude Include="ConsoleUI.h" />
     <ClInclude Include="doctest.h" />
     <ClInclude Include="Edge.h" />
