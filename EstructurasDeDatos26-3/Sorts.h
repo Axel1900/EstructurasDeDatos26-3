@@ -133,25 +133,45 @@ void MergeSort(T* arreglo, int tamanio)
 template <class T>
 int Particion(T* arreglo, int inicio, int fin)
 {
-    // TODO: elige un pivote, acomoda los elementos a su alrededor, y
-    // regresa la POSICION FINAL del pivote. Esa posicion es la que
-    // separa los dos lados que hay que ordenar despues.
-    //
-    // Dibuja esto en papel con cinco numeros antes de programarlo. Es el
-    // punto donde mas gente se atora.
-    return inicio;
+    T pivote = arreglo[fin];
+
+    int menor = inicio - 1;
+
+    for (int j = inicio; j < fin; j++)
+    {
+        if (arreglo[j] <= pivote)
+        {
+            menor++;
+            Intercambiar(arreglo[menor], arreglo[j]);
+        }
+    }
+
+    Intercambiar(arreglo[menor + 1], arreglo[fin]);
+
+    return menor + 1;
 }
 
 template <class T>
 void QuickRec(T* arreglo, int inicio, int fin)
 {
-    // TODO: caso base, particionar, y ordenar los dos lados.
-    // El pivote ya quedo en su lugar: no lo incluyas en ninguno de los
-    // dos lados o te vas a ciclar para siempre.
+    if (inicio >= fin)
+    {
+        return;
+    }
+
+    int posicionPivote = Particion(arreglo, inicio, fin);
+
+    QuickRec(arreglo, inicio, posicionPivote - 1);
+    QuickRec(arreglo, posicionPivote + 1, fin);
 }
 
 template <class T>
 void QuickSort(T* arreglo, int tamanio)
 {
-    // TODO: arrancar la recursion. Cuidado con el arreglo vacio.
+    if (arreglo == nullptr || tamanio < 2)
+    {
+        return;
+    }
+
+    QuickRec(arreglo, 0, tamanio - 1);
 }
