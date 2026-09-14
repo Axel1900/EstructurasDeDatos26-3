@@ -120,57 +120,150 @@ void Graph<T>::ResetVisited()
 template <class T>
 void Graph<T>::DFS(LinkedList<T>& resultado)
 {
-    // TODO: 1) llamar a ResetVisited() PRIMERO. Si no lo haces, correr
-    //          el recorrido dos veces te da vacio la segunda vez. Es el
-    //          mismo error que ya cazaste con el Flood Fill.
-    //
-    //       2) recorrer TU LISTA de nodos y, por cada nodo que siga sin
-    //          visitar, arrancar una nueva exploracion con DFSRec.
-    //
-    //          Esto ultimo es lo que hace que funcione con grafos
-    //          DESCONECTADOS. Si solo arrancas desde el primer nodo, un
-    //          grafo con dos islas te deja la mitad sin visitar.
+    ResetVisited();
+    for (int i = 0; i < _nodes.GetSize(); i++)
+    {
+        Node<T>* actual = _nodes.GetAt(i);
+        if (actual != nullptr && actual->GetVisited() == false)
+        {
+            DFSRec(actual,resultado)
+        }
+    }
 }
 
 template <class T>
 void Graph<T>::DFSRec(Node<T>* n, LinkedList<T>& resultado)
 {
-    // TODO: marcar el nodo como visitado, agregar su valor al resultado,
-    // y recorrer sus aristas.
-    //
-    // OJO con esto: en un grafo no dirigido, la arista por la que
-    // llegaste tambien aparece en la lista del nodo actual. Al seguir
-    // una arista tienes que preguntar cual de sus dos extremos NO es el
-    // nodo en el que estas parado. Ese es el paso que mas se olvida.
-    //
-    // Marca el nodo como visitado en cuanto ENTRAS a el, no al salir.
-    // Si lo marcas tarde, un ciclo te manda a un bucle infinito.
+    if (n == nullptr)
+    {
+        return;
+    }
+
+    n->SetVisited(true);
+    resultado.Add(n->GetValue());
+
+    for (int i = 0; i < n->GetNeighborCount(); i++)
+    {
+        Edge<T>* arista = n->GetNeighbor(i);
+
+        if (arista == nullptr)
+        {
+            continue;
+        }
+
+        Node<T>* vecino = arista->GetFrom();
+
+        if (vecino == n)
+        {
+            vecino = arista->GetTo();
+        }
+
+        if (vecino != nullptr && vecino->GetVisited() == false)
+        {
+            arista->SetVisited(true);
+            DFSRec(vecino, resultado);
+        }
+    }
 }
 
 template <class T>
 void Graph<T>::BFS(LinkedList<T>& resultado)
 {
-    // TODO: recorrido en anchura usando TU LinkedQueue<Node<T>*>.
-    //
-    // Mete el nodo inicial a la cola. Mientras la cola no este vacia:
-    // saca uno, agrega su valor al resultado, y encola a los vecinos que
-    // no hayan sido visitados.
-    //
-    // Marca al vecino como visitado EN EL MOMENTO DE ENCOLARLO, no
-    // cuando lo saques. Si esperas a sacarlo, el mismo nodo puede
-    // entrar dos veces a la cola y aparecer repetido.
-    //
-    // Igual que en DFS: ResetVisited() al inicio, y recorre tu lista de
-    // nodos para cubrir los grafos desconectados.
-    //
-    // Cuando termines, compara este metodo con DFSRec: es practicamente
-    // el mismo algoritmo, y lo unico que cambia es donde guardas los
-    // pendientes. Pila = profundidad. Cola = anchura.
+    ResetVisited();
+
+    for (int i = 0; i < _nodes.GetSize(); i++)
+    {
+        Node<T>* inicio = _nodes.GetAt(i);
+
+        if (inicio == nullptr || inicio->GetVisited() == true)
+        {
+            continue;
+        }
+
+        LinkedQueue<Node<T>*> pendientes;
+
+        inicio->SetVisited(true);
+        pendientes.Enqueue(inicio);
+
+        while (pendientes.IsEmpty() == false)
+        {
+            Node<T>* actual = pendientes.Dequeue();
+            resultado.Add(actual->GetValue());
+
+            for (int j = 0; j < actual->GetNeighborCount(); j++)
+            {
+                Edge<T>* arista = actual->GetNeighbor(j);
+
+                if (arista == nullptr)
+                {
+                    continue;
+                }
+
+                Node<T>* vecino = arista->GetFrom();
+
+                if (vecino == actual)
+                {
+                    vecino = arista->GetTo();
+                }
+
+                if (vecino != nullptr && vecino->GetVisited() == false)
+                {
+                    vecino->SetVisited(true);
+                    arista->SetVisited(true);
+                    pendientes.Enqueue(vecino);
+                }
+            }
+        }
+    }
 }
 
 template <class T>
 void Graph<T>::Print()
 {
-    // TODO: imprimir cada nodo y a quienes esta conectado, usando
-    // ConsoleUI.
+    onsoleUI::PrintTitle("GRAFO", 40);
+
+    if (_nodes.GetSize() == 0)
+    {
+        ConsoleUI::PrintColor("(grafo vacio)", ConsoleUI::COLOR_AMARILLO);
+        return;
+    }
+
+    for (int i = 0; i < _nodes.GetSize(); i++)
+    {
+        Node<T>* actual = _nodes.GetAt(i);
+
+        std::ostringstream linea;
+        linea << actual->GetValue() << " -> ";
+
+        if (actual->GetNeighborCount() == 0)
+        {
+            linea << "(sin conexiones)";
+        }
+
+        for (int j = 0; j < actual->GetNeighborCount(); j++)
+        {
+            Edge<T>* arista = actual->GetNeighbor(j);
+            Node<T>* vecino = arista->GetFrom();
+
+            if (vecino == actual)
+            {
+                vecino = arista->GetTo();
+            }
+
+            linea << vecino->GetValue();
+
+            if (j < actual->GetNeighborCount() - 1)
+            {
+                linea << ", ";
+            }
+        }
+
+        ConsoleUI::PrintColor(linea.str(), ConsoleUI::COLOR_CYAN);
+    }
+
+    ConsoleUI::PrintSeparator();
+
+    std::ostringstream resumen;
+    resumen << "Nodos: " << GetNodeCount() << "   Aristas: " << GetEdgeCount();
+    ConsoleUI::PrintColor(resumen.str(), ConsoleUI::COLOR_BLANCO);
 }
