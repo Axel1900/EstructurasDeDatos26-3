@@ -62,11 +62,11 @@ Graph<T>::Graph()
 template <class T>
 Graph<T>::~Graph()
 {
-    for (int i; i < _edges.GetSize(); i++)
+    for (int i = 0; i < _edges.GetSize(); i++)
     {
         delete _edges.GetAt(i);
     }
-    for (int i; i < _nodes.GetSize(); i++)
+    for (int i = 0; i < _nodes.GetSize(); i++)
     {
         delete _nodes.GetAt(i);
     }
@@ -85,10 +85,10 @@ void Graph<T>::AddEdge(Node<T>* a, Node<T>* b)
 {
     if (a == nullptr) return;
     if (b == nullptr) return;
-    Edge<T>* arista = new Node<T>*(a, b);
+    Edge<T>* arista = new Edge<T>(a, b);
     _edges.Add(arista);
-    a->AddNeighbor(arista)
-    b->AddNeighbor(arista)
+    a->AddNeighbor(arista);
+    b->AddNeighbor(arista);
 }
 
 template <class T>
@@ -126,7 +126,7 @@ void Graph<T>::DFS(LinkedList<T>& resultado)
         Node<T>* actual = _nodes.GetAt(i);
         if (actual != nullptr && actual->GetVisited() == false)
         {
-            DFSRec(actual,resultado)
+            DFSRec(actual, resultado);
         }
     }
 }
@@ -220,7 +220,7 @@ void Graph<T>::BFS(LinkedList<T>& resultado)
 template <class T>
 void Graph<T>::Print()
 {
-    onsoleUI::PrintTitle("GRAFO", 40);
+    ConsoleUI::PrintTitle("GRAFO", 40);
 
     if (_nodes.GetSize() == 0)
     {
