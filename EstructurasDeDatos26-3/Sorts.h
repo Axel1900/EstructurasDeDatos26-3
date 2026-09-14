@@ -23,6 +23,13 @@
 //  std::sort como funcion libre y no vector::sort como metodo.
 // =====================================================================
 
+template <class T>
+void Intercambiar(T& a, T& b)
+{
+    T temporal = a;
+    a = b;
+    b = temporal;
+}
 
 // ---------------------------------------------------------------------
 //  MERGE SORT
@@ -38,26 +45,75 @@
 template <class T>
 void Mezclar(T* arreglo, int inicio, int medio, int fin)
 {
-    // TODO: recibes DOS MITADES YA ORDENADAS dentro del mismo arreglo:
-    //       de 'inicio' a 'medio', y de 'medio+1' a 'fin'.
-    //       Tienes que producir un solo tramo ordenado.
-    //
-    // Ve comparando el primer elemento pendiente de cada mitad y toma el
-    // menor. Cuando una mitad se acabe, copia lo que quede de la otra.
-    //
-    // Vas a necesitar un arreglo temporal. Acuerdate de liberarlo.
+    int tamanio = fin - inicio + 1;
+    T* temporal = new T[tamanio];
+
+    int i = inicio;  
+    int j = medio + 1;  
+    int k = 0;        
+
+    while (i <= medio && j <= fin)
+    {
+        if (arreglo[i] <= arreglo[j])
+        {
+            temporal[k] = arreglo[i];
+            i++;
+        }
+        else
+        {
+            temporal[k] = arreglo[j];
+            j++;
+        }
+
+        k++;
+    }
+
+    while (i <= medio)
+    {
+        temporal[k] = arreglo[i];
+        i++;
+        k++;
+    }
+
+    while (j <= fin)
+    {
+        temporal[k] = arreglo[j];
+        j++;
+        k++;
+    }
+
+    for (k = 0; k < tamanio; k++)
+    {
+        arreglo[inicio + k] = temporal[k];
+    }
+
+    delete[] temporal;
 }
 
 template <class T>
 void MergeRec(T* arreglo, int inicio, int fin)
 {
-    // TODO: caso base, partir a la mitad, ordenar cada lado, mezclar.
+    if (inicio >= fin)
+    {
+        return;
+    }
+
+    int medio = inicio + (fin - inicio) / 2;
+
+    MergeRec(arreglo, inicio, medio);
+    MergeRec(arreglo, medio + 1, fin);
+    Mezclar(arreglo, inicio, medio, fin);
 }
 
 template <class T>
 void MergeSort(T* arreglo, int tamanio)
 {
-    // TODO: arrancar la recursion. Cuidado con el arreglo vacio.
+    if (arreglo == nullptr || tamanio < 2)
+    {
+        return;
+    }
+
+    MergeRec(arreglo, 0, tamanio - 1);
 }
 
 
