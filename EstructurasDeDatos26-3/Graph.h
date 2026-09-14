@@ -62,47 +62,59 @@ Graph<T>::Graph()
 template <class T>
 Graph<T>::~Graph()
 {
-    // TODO: liberar TODAS las aristas y TODOS los nodos, recorriendo las
-    // dos listas del grafo. Una sola vez cada cosa.
+    for (int i; i < _edges.GetSize(); i++)
+    {
+        delete _edges.GetAt(i);
+    }
+    for (int i; i < _nodes.GetSize(); i++)
+    {
+        delete _nodes.GetAt(i);
+    }
 }
 
 template <class T>
 Node<T>* Graph<T>::AddNode(T valor)
 {
-    // TODO: crear el nodo, guardarlo en _nodes, y regresarlo para que
-    // quien lo pidio pueda usarlo (por ejemplo, para conectarlo).
-    return nullptr;
+    Node<T>* nuevo = new Node<T>(valor);
+    _nodes.Add(nuevo);
+    return nuevo;
 }
 
 template <class T>
 void Graph<T>::AddEdge(Node<T>* a, Node<T>* b)
 {
-    // TODO: 1) validar que ninguno de los dos sea nullptr
-    //       2) crear la arista y guardarla en _edges
-    //       3) agregarla a la lista de vecinos de AMBOS nodos
-    //          (es un grafo NO dirigido: la conexion va en los dos
-    //           sentidos, y es LA MISMA arista, no una copia)
+    if (a == nullptr) return;
+    if (b == nullptr) return;
+    Edge<T>* arista = new Node<T>*(a, b);
+    _edges.Add(arista);
+    a->AddNeighbor(arista)
+    b->AddNeighbor(arista)
 }
 
 template <class T>
 int Graph<T>::GetNodeCount()
 {
-    // TODO
-    return 0;
+    return _nodes.GetSize();
 }
 
 template <class T>
 int Graph<T>::GetEdgeCount()
 {
-    // TODO
-    return 0;
+    return _edges.GetSize();
 }
 
 template <class T>
 void Graph<T>::ResetVisited()
 {
-    // TODO: poner en false el _visited de todos los nodos y de todas
-    // las aristas.
+    for (int i = 0; i < _nodes.GetSize(); i++)
+    {
+        _nodes.GetAt(i)->SetVisited(false);
+    }
+
+    for (int i = 0; i < _edges.GetSize(); i++)
+    {
+        _edges.GetAt(i)->SetVisited(false);
+    }
 }
 
 template <class T>

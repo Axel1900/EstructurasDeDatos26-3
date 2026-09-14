@@ -64,31 +64,31 @@ Edge<T>::Edge(Node<T>* from, Node<T>* to)
     // que en un grafo NO dirigido el error se ESCONDE: como los
     // recorridos revisan los dos extremos de todas formas, el programa
     // sigue funcionando. Hay una prueba dedicada a cazar esto.
+    _from = from;
+    _to = to;
+    _visited = false;
 }
 
 template <class T>
 Node<T>* Edge<T>::GetFrom()
 {
-    // TODO
-    return nullptr;
+    return _from;
 }
 
 template <class T>
 Node<T>* Edge<T>::GetTo()
 {
-    // TODO
-    return nullptr;
+    return _to;
 }
 
 template <class T>
 void Edge<T>::SetVisited(bool visitado)
 {
-    // TODO
+    _visited = visitado;
 }
 
 template <class T>
 bool Edge<T>::GetVisited()
 {
-    // TODO
-    return false;
+    return _visited;
 }

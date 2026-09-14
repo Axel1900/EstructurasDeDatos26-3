@@ -48,51 +48,49 @@ Node<T>::Node()
 template <class T>
 Node<T>::Node(T valor)
 {
-    // TODO: guardar el valor y dejar _visited en false
+    _value = valor;
+    _visited = false;
 }
 
 template <class T>
 T Node<T>::GetValue()
 {
-    // TODO
-    return T();
+    return _value;
 }
 
 template <class T>
 void Node<T>::SetValue(T valor)
 {
-    // TODO
+    _value = valor;
 }
 
 template <class T>
 void Node<T>::SetVisited(bool visitado)
 {
-    // TODO
+    _visited = visitado;
 }
 
 template <class T>
 bool Node<T>::GetVisited()
 {
-    // TODO
-    return false;
+    return _visited;
 }
 
 template <class T>
 void Node<T>::AddNeighbor(Edge<T>* arista)
 {
-    // TODO: agregar la arista a la lista de vecinos
+    if (arista == nullptr)  return;
+    _neighbors.Add(arista);
 }
 
 template <class T>
 int Node<T>::GetNeighborCount()
 {
-    // TODO
-    return 0;
+    return _neighbors.GetSize();
 }
 
 template <class T>
 Edge<T>* Node<T>::GetNeighbor(int indice)
 {
-    // TODO
-    return nullptr;
+    return _neighbors.GetAt(indice) ;
 }
