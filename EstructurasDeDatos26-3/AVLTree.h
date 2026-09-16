@@ -249,29 +249,36 @@ typename AVLTree<T>::Node* AVLTree<T>::Balancear(Node* n)
 template <class T>
 void AVLTree<T>::Insert(T valor)
 {
-    // TODO: arrancar la recursion y GUARDAR el resultado en _root.
-    // Ese "guardar" es importante: si la raiz rota, _root cambia.
+    _root = InsertRec(_root, valor)
 }
 
 template <class T>
 typename AVLTree<T>::Node* AVLTree<T>::InsertRec(Node* n, T valor)
 {
-    // TODO: la estructura es la misma de tu BST (bajar a la izquierda o
-    // a la derecha segun la comparacion, no admitir duplicados), con dos
-    // diferencias:
-    //
-    //   1. Guarda el resultado de la llamada recursiva:
-    //          n->left = InsertRec(n->left, valor);
-    //
-    //   2. Al REGRESAR de la recursion, llama a Balancear(n) y regresa
-    //      lo que te de.
-    //
-    // Ese "al regresar" es lo mismo que ya hiciste con PrintReverse y
-    // con el post-orden: la accion ocurre cuando la recursion se
-    // devuelve, no cuando baja.
-    //
-    // El nodo nuevo nace con altura 1.
-    return n;
+    if (n == nullptr)
+    {
+        Node* nuevo = new Node();
+        nuevo->data = valor;
+        nuevo->left = nullptr;
+        nuevo->right = nullptr;
+        nuevo->height = 1;
+
+        _size++;
+        return nuevo;
+    }
+    if (valor < n->data)
+    {
+        n->left = InsertRec(n->left, valor)
+    }
+    else if (n->data < valor)
+    {
+        n->right = InsertRec(n->right,valor)
+    }
+    else
+    {
+        return n;
+    }
+    return Balancear(n);
 }
 
 
