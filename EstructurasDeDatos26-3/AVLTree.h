@@ -134,17 +134,33 @@ int AVLTree<T>::Altura(Node* n)
 template <class T>
 int AVLTree<T>::FactorBalance(Node* n)
 {
-    // TODO: altura(izquierda) - altura(derecha). Un nodo nulo da 0.
-    //
-    // Positivo = cargado a la izquierda.
-    // Negativo = cargado a la derecha.
-    return 0;
+    if (n == nullptr)
+    {
+        return;
+    }
+    return Altura(n->left) - Altura(n->right);
+    
 }
 
 template <class T>
 void AVLTree<T>::ActualizarAltura(Node* n)
 {
-    // TODO: la altura de n es 1 mas que la del MAS ALTO de sus dos hijos.
+    if (n == nullptr)
+    {
+        return;
+    }
+    int izquierda = Altura(n->left);
+    int Derecha = Altura(n->right);
+    int temp = 0;
+    if (izquierda > Derecha)
+    {
+        temp = izquierda;
+    }
+    else
+    {
+        temp = Derecha;
+    }
+    n->height = temp + 1;       //+1 para contar este nodo
 }
 
 
