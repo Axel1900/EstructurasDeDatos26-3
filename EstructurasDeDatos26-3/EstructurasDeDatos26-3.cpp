@@ -99,6 +99,7 @@ void MenuPruebas()
     std::cout << "11.- Graph" << std::endl;
     std::cout << "12.- GraphRecorridos" << std::endl;
     std::cout << "13.- Ordenamientos" << std::endl;
+    std::cout << "14.- AVL" << std::endl;
     std::cout << "Elige un grupo: ";
     std::cin >> grupo;
 
@@ -125,6 +126,7 @@ void MenuPruebas()
     case 11: CorrerPruebasDe("Graph");            break;
     case 12: CorrerPruebasDe("GraphRecorridos");  break;
     case 13: CorrerPruebasDe("Ordenamientos");    break;
+    case 14: CorrerPruebasDe("AVL");    break;
     default: ConsoleUI::PrintError("Grupo invalido."); break;
     }
 }

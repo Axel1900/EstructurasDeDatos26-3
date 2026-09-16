@@ -1,6 +1,8 @@
 #pragma once
 #include "LinkedList.h"
 #include "ConsoleUI.h"
+#include <sstream>
+#include <string>
 
 // =====================================================================
 //  AVLTree<T>  -  Arbol binario de busqueda BALANCEADO
@@ -136,7 +138,7 @@ int AVLTree<T>::FactorBalance(Node* n)
 {
     if (n == nullptr)
     {
-        return;
+        return  0;
     }
     return Altura(n->left) - Altura(n->right);
     
@@ -249,7 +251,7 @@ typename AVLTree<T>::Node* AVLTree<T>::Balancear(Node* n)
 template <class T>
 void AVLTree<T>::Insert(T valor)
 {
-    _root = InsertRec(_root, valor)
+    _root = InsertRec(_root, valor);
 }
 
 template <class T>
@@ -268,11 +270,11 @@ typename AVLTree<T>::Node* AVLTree<T>::InsertRec(Node* n, T valor)
     }
     if (valor < n->data)
     {
-        n->left = InsertRec(n->left, valor)
+        n->left = InsertRec(n->left, valor);
     }
     else if (n->data < valor)
     {
-        n->right = InsertRec(n->right,valor)
+        n->right = InsertRec(n->right, valor);
     }
     else
     {
@@ -301,11 +303,11 @@ bool AVLTree<T>::ContainsRec(Node* n, T valor)
     }
     if (valor < n->data)
     {
-        return ContainsRec(n->left, valor)
+        return ContainsRec(n->left, valor);
     }
     if (n->data < valor)
     {
-        return ContainsRec(n->right,valor)
+        return ContainsRec(n->right, valor);
     }
 
     return true;
