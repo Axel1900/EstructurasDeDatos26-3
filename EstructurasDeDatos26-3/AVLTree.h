@@ -353,21 +353,61 @@ bool AVLTree<T>::BalanceadoRec(Node* n)
 template <class T>
 void AVLTree<T>::InOrden(LinkedList<T>& resultado)
 {
-    // TODO
+    InRec(_root, resultado);
 }
 
 template <class T>
 void AVLTree<T>::InRec(Node* n, LinkedList<T>& resultado)
 {
-    // TODO: izquierda, nodo, derecha. En un arbol de busqueda sale
-    // ordenado, y eso es tu mejor verificacion: si tu in-orden sale
-    // desordenado, alguna rotacion esta moviendo un puntero al lado
-    // equivocado.
+    if (n == nullptr)
+    {
+        return;
+    }
+    InRec(n->left, resultado);
+    resultado.Add(n->data);
+    InRec(n->right, resultado);
 }
 
 template <class T>
 void AVLTree<T>::Print()
 {
-    // TODO: usa el recorrido in-orden y ConsoleUI. Casi todo el trabajo
-    // ya lo hiciste: aqui solo lo conectas.
+    ConsoleUI::PrintTitle("ARBOL AVL", 40);
+
+    if (_root == nullptr)
+    {
+        ConsoleUI::PrintColor("(arbol vacio)", ConsoleUI::COLOR_AMARILLO);
+        return;
+    }
+
+    LinkedList<T> ordenados;
+    InOrden(ordenados);
+
+    std::ostringstream linea;
+
+    for (int i = 0; i < ordenados.GetSize(); i++)
+    {
+        linea << ordenados.GetAt(i);
+
+        if (i < ordenados.GetSize() - 1)
+        {
+            linea << ", ";
+        }
+    }
+
+    ConsoleUI::PrintColor(linea.str(), ConsoleUI::COLOR_CYAN);
+    ConsoleUI::PrintSeparator();
+
+    std::string balanceado = "no";
+
+    if (EstaBalanceado())
+    {
+        balanceado = "si";
+    }
+
+    std::ostringstream resumen;
+    resumen << "Nodos: " << GetSize();
+    resumen << "   Altura: " << GetAltura();
+    resumen << "   Balanceado: " << balanceado;
+
+    ConsoleUI::PrintColor(resumen.str(), ConsoleUI::COLOR_BLANCO);
 }
