@@ -97,14 +97,21 @@ AVLTree<T>::AVLTree()
 template <class T>
 AVLTree<T>::~AVLTree()
 {
-    // TODO: llamar a DestruirRec desde la raiz
+    DestruirRec(_root);
+    _root = nullptr;
+    _size = 0;
 }
 
 template <class T>
 void AVLTree<T>::DestruirRec(Node* n)
 {
-    // TODO: destruir primero los hijos y HASTA EL FINAL el nodo actual.
-    // Igual que en tu Tree: ese orden es el post-orden.
+    if (n == nullptr)
+    {
+        return;
+    }
+    DestruirRec(n->left);
+    DestruirRec(n->right);
+    delete n;
 }
 
 
@@ -117,12 +124,11 @@ void AVLTree<T>::DestruirRec(Node* n)
 template <class T>
 int AVLTree<T>::Altura(Node* n)
 {
-    // TODO: regresar la altura GUARDADA en el nodo, o 0 si es nulo.
-    //
-    // Fijate que NO la recalcula recorriendo el arbol: la lee del campo
-    // height. Por eso es O(1), y por eso es tan importante mantener ese
-    // campo actualizado.
-    return 0;
+    if (n == nullptr)
+    {
+        return 0;
+    }
+    return n->height;
 }
 
 template <class T>
@@ -250,7 +256,7 @@ typename AVLTree<T>::Node* AVLTree<T>::InsertRec(Node* n, T valor)
 template <class T>
 bool AVLTree<T>::Contains(T valor)
 {
-    // TODO
+    ContainsRec(valor);
     return false;
 }
 
@@ -266,14 +272,14 @@ template <class T>
 int AVLTree<T>::GetSize()
 {
     // TODO
-    return 0;
+    return _size;
 }
 
 template <class T>
 int AVLTree<T>::GetAltura()
 {
     // TODO: la altura del arbol completo.
-    return 0;
+    return Node::height;
 }
 
 template <class T>
