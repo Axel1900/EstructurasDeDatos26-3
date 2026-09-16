@@ -289,49 +289,60 @@ typename AVLTree<T>::Node* AVLTree<T>::InsertRec(Node* n, T valor)
 template <class T>
 bool AVLTree<T>::Contains(T valor)
 {
-    ContainsRec(valor);
-    return false;
+    return ContainsRec(_root , valor);
 }
 
 template <class T>
 bool AVLTree<T>::ContainsRec(Node* n, T valor)
 {
-    // TODO: igual que en tu BST. El balanceo no cambia como se busca,
-    // solo garantiza que la busqueda sea corta.
-    return false;
+    if (n == nullptr)
+    {
+        return false;
+    }
+    if (valor < n->data)
+    {
+        return ContainsRec(n->left, valor)
+    }
+    if (n->data < valor)
+    {
+        return ContainsRec(n->right,valor)
+    }
+
+    return true;
 }
 
 template <class T>
 int AVLTree<T>::GetSize()
 {
-    // TODO
     return _size;
 }
 
 template <class T>
 int AVLTree<T>::GetAltura()
 {
-    // TODO: la altura del arbol completo.
-    return Node::height;
+    return Altura(_root);
 }
 
 template <class T>
 bool AVLTree<T>::EstaBalanceado()
 {
-    // TODO
-    return true;
+    return BalanceadoRec(_root);
 }
 
 template <class T>
 bool AVLTree<T>::BalanceadoRec(Node* n)
 {
-    // TODO: un nodo nulo esta balanceado. Si no, su factor debe estar
-    // entre -1 y 1, Y sus dos hijos tambien deben estar balanceados.
-    //
-    // Esta funcion es tu DETECTOR: llamala despues de cada insercion
-    // mientras depuras. En cuanto regrese false, la insercion que
-    // acabas de hacer es la que rompio algo.
-    return true;
+    if (n == nullptr)
+    {
+        return true;
+    }
+    int factor = FactorBalance(n);
+
+    if (factor > 1 || factor < -1)
+    {
+        return false;
+    }
+    return BalanceadoRec(n->left) && BalanceadoRec(n->right);
 }
 
 
